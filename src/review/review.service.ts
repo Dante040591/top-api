@@ -19,4 +19,8 @@ export class ReviewService {
   async findByProductId(productId: string): Promise<ReviewModel[]> {
     return this.reviewModel.find({ productId: new Types.ObjectId(productId) }).exec();
   }
+
+  async deleteByProductId(productId: string) {
+    return this.reviewModel.deleteMany({ productId: new Types.ObjectId(productId) }).exec();
+  }
 }
