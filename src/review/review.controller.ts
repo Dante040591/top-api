@@ -14,8 +14,8 @@ import {
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewService } from './review.service';
 import { REVIEW_NOT_FOUND } from './review.constants';
-import { JWTAuthGuard } from '../../src/auth/guard/jwt.guard';
-import { UserEmail } from '../../src/decorators/user-email.decorator';
+import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { UserEmail } from 'src/decorators/user-email.decorator';
 
 @Controller('review')
 export class ReviewController {
