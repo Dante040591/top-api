@@ -27,6 +27,7 @@ export class ProductService {
     return this.productModel.findByIdAndUpdate(id, dto, { new: true }).exec();
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async findWithReviews(dto: FindProductDto) {
     return this.productModel
       .aggregate([
@@ -55,6 +56,16 @@ export class ProductService {
           $addFields: {
             reviewCount: { $size: '$reviews' },
             reviewAvg: { $avg: '$reviews.rating' },
+            reviews: {
+              $function: {
+                body: `function (reviews) {
+                  reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                  return reviews;
+                }`,
+                params: ['reviews'],
+                lang: 'js',
+              },
+            },
           },
         },
       ])
