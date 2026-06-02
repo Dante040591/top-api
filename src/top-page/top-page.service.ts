@@ -28,8 +28,18 @@ export class TopPageService {
     return this.topPageModel.findByIdAndUpdate(id, dto, { new: true });
   }
 
-  async findByCategory(firstCategory: TopLevelCategory): Promise<TopPageModel[]> {
-    return this.topPageModel.find({ firstCategory }, { _id: 1, alias: 1, secondCategory: 1, title: 1 }).exec();
+  async findByCategory(firstCategory: TopLevelCategory) {
+    return this.topPageModel
+      .aggregate([
+        { $match: { firstCategory } },
+        {
+          $group: {
+            _id: { secondCategory: '$secondCategory', firstCategory: '$firstCategory' },
+            pages: { $push: { alias: '$alias', title: '$title' } },
+          },
+        },
+      ])
+      .exec();
   }
 
   async findByText(text: string): Promise<TopPageModel[]> {
